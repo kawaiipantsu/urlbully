@@ -9,47 +9,210 @@
     <link rel="stylesheet" type="text/css" href="./css/main.css">
   </head>
   <body>
-
-    <!-- MAke a header that has logo left side, and rest right aligned -->
     <header>
       <div class="logobox">
         <img src="./images/urlbully-image.png" class="logo"/>
       </div>
       <div class="header-right">
+      <div class="http-graph maingraph">
+        <canvas id="httpchart" class="fill100"></canvas>
+      </div>
         <div class="cpu-graph graph">
-          <div class="graph-bar" id="cpu-graph-bar"></div>
+          <div class="graph-text" id="cpu-graph-bar-text">0%</div>
+          <div class="graph-bar" id="cpu-graph-bar-pct"></div>
           <div class="graph-label" id="cpu-graph-label">CPU Usage</div>
         </div>
         <div class="mem-graph graph">
-          <div class="graph-bar" id="mem-graph-bar"></div>
+          <div class="graph-text" id="mem-graph-bar-text">0%</div>
+          <div class="graph-bar" id="mem-graph-bar-pct"></div>
           <div class="graph-label" id="mem-graph-label">Memory Usage</div>
         </div>
         <div class="thread-graph graph">
-          <div class="graph-bar" id="thread-graph-bar">0</div>
-          <div class="graph-label" id="thread-graph-label">Thread Count</div>
+          <div class="graph-text" id="thread-graph-bar-text">0</div>
+          <div class="graph-bar" id="thread-graph-bar-pct"></div>
+          <div class="graph-label" id="thread-graph-label">Worker pool</div>
+        </div>
+        <div class="request-graph graph">
+          <div class="graph-text" id="request-graph-bar-text">0</div>
+          <div class="graph-bar" id="request-graph-bar-pct"></div>
+          <div class="graph-label" id="request-graph-label">Requests / sec</div>
         </div>
       </div>
     </header>
 
-    <main>
+    <main class="main">
       <div class="urlconfig">
         <fieldset>
-          <legend>URL Settings</legend>
-    
+          <legend><img src="./images/worldwide.png" alt="" title="" width="14" height="14" border="0"> Connection Settings</legend>
+            <label for="url">
+              <input type="input" id="urladdress" name="url" value="" class="silentclick" placeholder="http://example.com" />
+            </label>
+          <table cellpadding="0" cellspacing="0" class="confoptions">
+            <tr>
+              <td class="wide alignleft"><label for="felt1">
+                <span class="label">Num requests</span>
+                <select id="numrequests" class="silentclick">
+                  <option value="infinete">Until stopped</option>
+                  <option value="1">1</option>
+                  <option value="100">100</option>
+                  <option value="1000">1000</option>
+                  <option value="10000">10000</option>
+                </select>
+                </label>
+              </td>
+              <td class="second">
+                <label class="container">Insecure
+                  <input type="checkbox" checked>
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+              <td class="third">
+                <label class="container">Tralala
+                  <input type="checkbox">
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+            </tr> 
+          </table>
+          <table cellpadding="0" cellspacing="0" class="confoptions">
+            <tr>
+              <td class="wide alignleft"><label for="felt1">
+                <span class="label">Num requests</span>
+                <select id="numrequests" class="silentclick">
+                  <option value="infinete">Until stopped</option>
+                  <option value="1">1</option>
+                  <option value="100">100</option>
+                  <option value="1000">1000</option>
+                  <option value="10000">10000</option>
+                </select>
+                </label>
+              </td>
+              <td>
+                <label class="container">Aasdaf
+                  <input type="checkbox">
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+              <td>
+                <label class="container">Asgw sad 
+                  <input type="checkbox">
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+            </tr> 
+          </table>
         </fieldset>  
       </div>
       <div class="httpconfig">
         <fieldset>
-          <legend>HTTP Settings</legend>
-    
+          <legend><img src="./images/settings-2.png" alt="" title="" width="14" height="14" border="0"> HTTP Settings</legend>
+          <table cellpadding="0" cellspacing="0" class="httpoptions">
+            <tr>
+              <td class="wide alignleft">
+                <label for="method"><div class="label2">Method</div>
+                <select id="method" class="spancustom silentclick">
+                  <option value="get">GET</option>
+                  <option value="post">POST</option>
+                  <option value="put">PUT</option>
+                  <option value="delete">DELETE</option>
+                  <option value="head">HEAD</option>
+                </select>
+                </label>
+              </td>
+            </tr> 
+          </table>
+          <table cellpadding="0" cellspacing="0" class="httpoptions">
+            <tr>
+              <td class="wide alignleft">
+                <label for="useragent"><div class="label2">UA</div>
+                <select id="useragent" class="spancustom silentclick">
+                  <option value="chrome">Latest Chrome</option>
+                  <option value="firefox">Latest Firefox</option>
+                  <option value="safari">Latest Safari</option>
+                  <option value="edge">Latest Edge</option>
+                  <option value="opera">Latest Opera</option>
+                  <option value="ie">Latest Internet Explorer</option>
+                  <option value="android">Latest Android</option>
+                  <option value="ios">Latest iOS</option>
+                  <option value="curl">cURL</option>
+                  <option value="wget">Wget</option>
+                  <option value="httpclient">HttpClient</option>
+                  <option value="python">Python</option>
+                  <option value="php">PHP</option>
+                  <option value="java">Java</option>
+
+                  <option value="random">Random</option>
+                </select>
+                </label>
+              </td>
+            </tr> 
+          </table>
         </fieldset>  
       </div>
       <div class="payloadconfig">
         <fieldset>
-          <legend>Payload Settings</legend>
-    
+          <legend><img src="./images/settings.png" alt="" title="" width="14" height="14" border="0"> Payload</legend>
+          <table>
+            <tr>
+              <td class="alignleft">
+                <label class="container overrulewidth">Raw
+                <input type="checkbox" checked>
+                <span class="checkmark"></span>
+              </label>
+              </td>
+              <td class="alignleft">
+                <label class="container overrulewidth">Body
+                <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
+              </td>
+              <td class="alignleft">
+                <label class="container overrulewidth">Json
+                  <input type="checkbox">
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+              <td class="alignleft">
+                <label class="container overrulewidth">Fields
+                  <input type="checkbox">
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+              <td class="alignleft">
+                &VerticalSeparator;
+              </td>
+              <td class="alignleft">
+                <label class="container overrulewidth">Bully Vars
+                  <input type="checkbox" checked>
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+              <td class="alignleft">
+                <label class="container overrulewidth">Javascript
+                  <input type="checkbox">
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+              <td class="alignleft">
+                <label class="container overrulewidth">Show output/result
+                  <input type="checkbox">
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+            </tr>
+          </table>
+          <textarea id="payload" class="payload silentclick" name="payload" placeholder=""></textarea>
         </fieldset>  
       </div>
+
+      <div class="controls">
+        <button id="start" class="buttons">Begin bullying</button>
+        <button id="stop" class="buttons">Copy to curl</button>
+        <button id="clear" class="buttons">Show log</button>
+        <hr>
+        <div class="workertext">Workers</div>
+        <button id="clear" class="buttonssmall">+</button>
+        <button id="clear" class="buttonssmall">-</button>
     </main>
 
     <footer>
@@ -59,6 +222,12 @@
         </div>
     </footer>
 
+
+    <script src="./js/chart.js"></script>
+    <script src="./js/luxon.js"></script>
+    <script src="./js/chartjs-adapter-luxon.js"></script>
+    <script src="./js/chartjs-plugin-streaming.js"></script>
     <script src="./js/renderer.js"></script>
+
   </body>
 </html>

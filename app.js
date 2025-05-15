@@ -34,10 +34,37 @@ const createWindow = () => {
             mainWindow.webContents.send("cpu", v * 100 );
             let tmem = osUtils.totalmem()
             let fmem = osUtils.freemem()
-            mainWindow.webContents.send("mem", (tmem-fmem) / 1024);
-            mainWindow.webContents.send("total-mem", tmem / 1024);
+
+            // MAke a memory object with total, used, free, pct
+            // Both include pct free and pct used
+            // total, free, used also show in GB
+            let mem = {
+                total: tmem,
+                free: tmem - fmem,
+                used: fmem,
+                total_human: (tmem / 1024).toFixed(2),
+                free_human: ((tmem - fmem) / 1024).toFixed(2),
+                used_human: (fmem / 1024).toFixed(2),
+                pctUsed: fmem / tmem * 100,
+                pctFree: (tmem - fmem) / tmem * 100
+            }
+
+            mainWindow.webContents.send("mem-used-pct", fmem / tmem * 100);
+            mainWindow.webContents.send("mem", mem);
         });
   }, 2000);
+
+  setInterval(() => {
+    
+    mainWindow.webContents.send("updateHTTP200", {
+      timestamp: new Date().getTime(),
+      value: Math.floor(Math.random() * 600)
+    });
+
+
+  }, 2000);
+
+
 
   mainWindow.loadFile('./static/main.html')
 }

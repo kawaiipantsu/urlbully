@@ -1,7 +1,12 @@
-* {
-    margin: 5px;
+*,
+*:before,
+*:after {
     padding: 0;
-    box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -16,9 +21,9 @@ header {
     left: 0;
     top: 0;
     margin: 0 auto;
-    width: 100%;
+    width: calc( 100% - 20px);
     max-width: 1200px;
-    height: 175px;
+    height: 155px;
     padding: 10px;
 }
 
@@ -30,53 +35,54 @@ header {
     top: 0;
     margin: 10px;
     width: 100%;
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 130px;
     padding: 10px;
-    box-shadow: inset 0px 0px 14px 0px rgba(226, 222, 222, 0.167);
+    box-shadow: inset 0px 0px 14px 0px rgba(226, 222, 222, 0.064);
 }
 
 .logo {
-    width: 140px;
-    height: 140px;
-    margin: -5px;
+    width: 135px;
+    height: 135px;
+    align-items: center;
 }
 
 .header-right {
     float: right;
-    width: calc(100% - 160px);
-    height: 150px;
+    width: calc( 100% - 180px);
+    height: 140px;
     margin: 0 auto;
-    padding: 5px;
+    padding: 10px;
 }
 
 main {
     position: absolute;
     left: 0;
-    top: 165px;
+    top: 170px;
     margin: 0 auto;
     width: 100%;
     max-width: 1200px;
-    padding: 1px;
+    padding: 0px;
+    box-sizing: border-box;
 }
 
 fieldset {
     border: thin solid #00000020;
     border-radius: 10px;
     background-color: #33343e;
-    color: #eeefeb81;
-    padding: 10px;
+    color: #eeefeb9c;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 0 auto;
     height: 100%;
     box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,1);
 }
 legend {
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: bold;
     color: #eeefebe5;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 1px;
-    padding-bottom: 1px;
 }
 
 footer {
@@ -84,25 +90,25 @@ footer {
     position: absolute;
     left: 0;
     bottom: 0;
-    margin: 0 auto;
-    width: 100%;
+    width: calc( 100% - 12px);
     max-width: 1200px;
-    padding: 2px;
     padding-left: 6px;
     padding-right: 6px;
-    height: 41px;
+    height: 30px;
+    padding-top: 5px;
 }
 .roundarea {
     font-size: 0.7em;
     font-weight: bold;
-    height: 26px;
-    border-radius: 5px;
+    height: 24px;
+    width: calc( 100% - 40px);
+    height: 18px;
+    border-radius: 8px;
     background-color: #33343e;
-    color: #eeefeb81;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 1px;
-    padding-bottom: 1px;
+    color: #ffffff42;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
     box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,1);
 }
 .sendleft {
@@ -121,50 +127,106 @@ footer {
     
 }
 
+.maingraph {
+    border-radius: 10px;
+    background-color: #0000000c;
+    padding-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.http-graph {
+    position: absolute;
+    right: 210px;
+    top: 10px;
+    border: thin solid #00000020;
+    width: 535px;
+    height: 150px;
+}
+
 .cpu-graph {
     position: absolute;
-    right: 5px;
-    top: 5px;
+    right: 10px;
+    top: 13px;
     border: thin solid #00000093;
-    width: 200px;
-    height: 50px;
+    width: 175px;
+    height: 12px;
+    padding-left: 4px;
+    padding-top: 14px;
 }
 
 .mem-graph {
     position: absolute;
-    right: 5px;
-    top: 58px;
+    right: 10px;
+    top: 53px;
     border: thin solid #00000093;
-    width: 200px;
-    height: 50px;
+    width: 175px;
+    height: 12px;
+    padding-left: 4px;
+    padding-top: 14px;
 }
 
 .thread-graph {
     position: absolute;
-    right: 5px;
-    top: 112px;
+    right: 10px;
+    top: 93px;
     border: thin solid #00000093;
-    width: 200px;
-    height: 50px;
+    width: 175px;
+    height: 12px;
+    padding-left: 4px;
+    padding-top: 14px;
 }
+
+.request-graph {
+    position: absolute;
+    right: 10px;
+    top: 133px;
+    border: thin solid #00000093;
+    width: 175px;
+    height: 12px;
+    padding-left: 4px;
+    padding-top: 14px;
+}
+
 .graph-bar {
-    border: thin solid #cac3c393;
     background-color: #ff000035;
     border-radius: 5px;
     align-content: center;
+    font-size: 0.7em;
     text-align: center;
     padding-left: 5px;
-    height: 25px;
+    height: 10px;
     width: 0%;
     transition: width 2s linear;
+    -webkit-mask:linear-gradient(#fff 0 0);
+          mask:linear-gradient(#fff 0 0);
 }
+.graph-bar::before {
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background-image: linear-gradient(to right, rgba(255, 225, 0, 0.333), rgba(255, 140, 0, 0.403), rgba(255, 0, 0, 0.437)); /* your gradient here */
+}
+.graph-text {
+    position: absolute;
+    top: 13px;
+    left: 8px;
+    width: 100px;
+    color: #eeefeb;
+    font-size: 0.6em;
+    z-index: 1000;
+}
+
 @keyframes loadProgressBar {
    0% {width: 0;}
  100% {width: 100%;}
 }
 .graph-label {
     position: absolute;
-    top: -20px;
+    top: -10px;
     left: 0;
     width: 100%;
     height: 100%;
@@ -177,15 +239,15 @@ footer {
 
 .payloadconfig {
     position: absolute;
-    left: 0px;
-    top: 160px;
-    width: calc(100% - 10px);
-    height: 190px;
+    left: 5px;
+    top: 172px;
+    width: calc(100% - 160px);
+    height: 170px;
 }
 
 .urlconfig {
     position: absolute;
-    left: 0px;
+    left: 5px;
     top: 10px;
     width: 610px;
     height: 150px;
@@ -193,8 +255,260 @@ footer {
 
 .httpconfig {
     position: absolute;
-    left: 610px;
+    left: 615px;
     top: 10px;
     width: 310px;
     height: 150px;
+}
+
+canvas{
+  width:530px !important;
+  height:140px !important;
+}
+
+#test {
+
+    font-size: 0.8em;
+}
+
+label {
+    font-size: 0.8em;
+    color: #eeefeb;
+}
+
+.label {
+    font-size: 1em;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.634);
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.label2 {
+    font-size: 1em;
+    width: 60px;
+    float: left;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.634);
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-top: 3px;
+}
+
+input[type="input"] {
+    font-size: 1.4em;
+    color: #ffffff90;
+    background-color: #00000030;
+    border: thin solid #00000020;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: calc(100% - 40px);
+}
+
+select {
+    font-size: 1.0em;
+    color: #ffffff90;
+    background-color: #00000030;
+    border: thin solid #00000020;
+    border-radius: 5px;
+    width: 150px;
+}
+
+/* Customize the label (the container) */
+.container {
+  display: block;
+  cursor: pointer;
+  font-size: 0.8em;
+  font-weight: bold;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding-right: 30px;
+  width: 100px;
+  color: rgba(255, 255, 255, 0.634);
+}
+
+.overrulewidth {
+    width: inherit;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  background-color: #00000050;
+  border-radius: 5px;
+  font-size: 1.0em;
+  margin-left: 10px;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #45454598;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #fd0000c7;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 4px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.confoptions {
+    width: calc(100% - 50px);
+    margin-left: 10px;
+    border-collapse: collapse;
+    margin: 10px;
+    padding: 0;
+}
+
+.httpoptions {
+    border-collapse: collapse;
+    margin: 10px;
+}
+
+.span100 {
+    width: 100%;
+}
+
+.spancustom {
+    width: calc( 100% - 85px);
+}
+
+.wide {
+    width: 300px;
+}
+
+.alignleft {
+    text-align: left;
+    padding-left: 10px;
+}
+
+td {
+    padding: 0;
+    margin: 0;
+    align-items: right;
+    text-align: right;
+}
+
+.payload {
+    width: calc(100% - 10px);
+    height: calc(100% - 38px);
+    border-radius: 10px;
+    background-color: #00000015;
+    border: thin solid #00000020;
+    resize: none;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+.silentclick:focus {
+    cursor: pointer;
+    background-color: rgba(0, 0, 255, 0.051);
+    outline-color: #282934;
+    outline-style: solid;
+    color: white;
+}
+
+.isactive {
+    background-color: rgba(0, 0, 255, 0.051);
+    outline-color: #282934;
+    outline-style: solid;
+    color: white;
+}
+
+.controls {
+    position: absolute;
+    right: 10px;
+    top: 185px;
+    color: #ffffff4a;
+    font-size: 1.0em;
+    width: 140px;
+    height: 168px;
+}
+
+.buttons {
+    color: #ffffffd7;
+    background-color: #00000010;
+    color: #ffffffd4;
+    font-size: 0.9em;
+    width: 135px;
+    height: 30px;
+    margin: 4px;
+    border-radius: 15px;
+    border: 2px solid #00000020;
+}
+hr {
+    border: thin solid #00000020;
+    width: calc(100% - 20px);
+}
+.buttonssmall {
+    color: #ffffffd4;
+    background-color: #00000030;
+    font-size: 0.9em;
+    width: 50px;
+    height: 20px;
+    margin-left: 12px;
+    border-radius: 15px;
+    border: thin solid #ffffff20;
+}
+.buttons:hover {
+    background-color: rgba(0, 0, 255, 0.051);
+    border: 2px solid rgba(98, 98, 255, 0.134);
+    color: #ffffff;
+}
+.buttonssmall:hover {
+    background-color: rgba(0, 0, 255, 0.051);
+    border: 2px solid rgba(98, 98, 255, 0.134);
+    color: #ffffff;
+}
+.buttons:active {
+    background-color: rgba(0, 0, 255, 0.129);
+    border: 3px solid rgba(98, 98, 255, 0.134);
+    color: #ffffff;
+}
+.buttonssmall:active {
+    background-color: rgba(0, 0, 255, 0.129);
+    border: 3px solid rgba(98, 98, 255, 0.134);
+    color: #ffffff;
+}
+.workertext {
+    font-size: 0.8em;
+    color: #ffffff90;
+    padding-bottom: 5px;
+    text-align: center;
 }

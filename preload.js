@@ -16,16 +16,19 @@ contextBridge.exposeInMainWorld('usage', {
   cpu: process.getCPUUsage().percentCPUUsage.toString().slice(0, 5)
 });
 ipcRenderer.on('cpu', (event, data) => {
-  const cpuBar = document.getElementById('cpu-graph-bar');
-  cpuBar.innerHTML = Math.round(data.toFixed(2))+'%';
-  cpuBar.style.width = Math.round(data.toFixed(2))+'%';
+  const text = document.getElementById('cpu-graph-bar-text');
+  const pct = document.getElementById('cpu-graph-bar-pct');
+  text.innerHTML = Math.round(data.toFixed(2))+'%';
+  pct.style.width = Math.round(data.toFixed(2))+'%';
+});
+ipcRenderer.on('mem-used-pct', (event, data) => {
+  const text = document.getElementById('mem-graph-bar-text');
+  const pct = document.getElementById('mem-graph-bar-pct');
+  text.innerHTML = Math.round(data.toFixed(2))+'%';
+  pct.style.width = Math.round(data.toFixed(2))+'%';
 });
 ipcRenderer.on('mem', (event, data) => {
-  const memBar = document.getElementById('mem-graph-bar');
-  memBar.innerHTML = Math.round(data.toFixed(2))+'%';
-  memBar.style.width = Math.round(data.toFixed(2))+'%';
-  //document.getElementById('mem').innerHTML = data.toFixed(2);
+  const test = document.getElementById('test');
+  test.innerHTML = 'Total: ' + data.total_human + ' GB<br>Used: ' + data.used_human + ' GB<br>Free: ' + data.free_human + ' GB<br>Pct Used: ' + data.pctUsed.toFixed(0) + '%<br>Pct Free: ' + data.pctFree.toFixed(0) + '%';
 });
-ipcRenderer.on('total-mem', (event, data) => {
-  //document.getElementById('total-mem').innerHTML = Math.round(data.toFixed(2));
-});
+
