@@ -1,33 +1,48 @@
-const $ = import('jquery');
+
+window.api.invoke('myfunc', [1,2,3])
+    .then(function(res) {
+        console.log(res); // will print "This worked!" to the browser console
+    })
+    .catch(function(err) {
+        console.error(err); // will print "This didn't work!" to the browser console.
+    });
+
 const ctx = document.getElementById('httpchart').getContext('2d');
 
 function getLatestData( counter ) {
   const now = Date.now();
   let data = [];
+
+  let http200Num = 0;
+  let http403Num = 0;
+  let http404Num = 0;
+  let http4xxNum = 0;
+  let http5xxNum = 0;
+
   switch (counter) {
     case "200":
         data = [
-            { x: now, y: Math.random() * 500 }, // HTTP 200
+            { x: now, y: http200Num }, // HTTP 200
         ];
       break;
     case "403":
         data = [
-            { x: now, y: Math.random() * 0 }, // HTTP 403
+            { x: now, y: http403Num }, // HTTP 403
         ];
       break;
     case "404":
         data = [
-            { x: now, y: Math.random() * 160 }, // HTTP 404
+            { x: now, y: http404Num }, // HTTP 404
         ];
       break;
     case "4xx":
         data = [
-            { x: now, y: Math.random() * 10 }, // HTTP 4xx
+            { x: now, y: http4xxNum }, // HTTP 4xx
         ];
       break;
     case "5xx":
         data = [
-            { x: now, y: Math.random() * 10 }, // HTTP 5xx  
+            { x: now, y: http5xxNum }, // HTTP 5xx  
         ];
       break;
     default:
@@ -92,6 +107,9 @@ const httpChart = new Chart(ctx, {
             }
         },
     scales: {
+      y: {
+        beginAtZero: true
+      },
       x: {
         type: 'realtime',   // x axis will auto-scroll from right to left
         realtime: {         // per-axis options
@@ -118,5 +136,23 @@ const httpChart = new Chart(ctx, {
         }
       }
     }
+  }
+});
+
+$("#payload").on('change keyup paste', function() {
+  var data = $(this).val();
+  if ( data.length > 0 ) {
+    $("#payload").addClass("isactive");
+  } else {
+    $("#payload").removeClass("isactive");
+  }
+});
+
+$("#urladdress").on('change keyup paste', function() {
+  var data = $(this).val();
+  if ( data.length > 0 ) {
+    $("#urladdress").addClass("isactive");
+  } else {
+    $("#urladdress").removeClass("isactive");
   }
 });

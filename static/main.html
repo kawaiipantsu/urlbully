@@ -42,10 +42,10 @@
 
     <main class="main">
       <div class="urlconfig">
-        <fieldset>
+        <fieldset class="fieldset">
           <legend><img src="./images/worldwide.png" alt="" title="" width="14" height="14" border="0"> Connection Settings</legend>
             <label for="url">
-              <input type="input" id="urladdress" name="url" value="" class="silentclick" placeholder="http://example.com" />
+              <input type="input" id="urladdress" name="url" value="" class="urlinput silentclick" placeholder="example.com / ip" />
             </label>
           <table cellpadding="0" cellspacing="0" class="confoptions">
             <tr>
@@ -67,8 +67,8 @@
                 </label>
               </td>
               <td class="third">
-                <label class="container">Tralala
-                  <input type="checkbox">
+                <label class="container">Trust all
+                  <input type="checkbox" checked>
                   <span class="checkmark"></span>
                 </label>
               </td>
@@ -76,26 +76,17 @@
           </table>
           <table cellpadding="0" cellspacing="0" class="confoptions">
             <tr>
-              <td class="wide alignleft"><label for="felt1">
-                <span class="label">Num requests</span>
-                <select id="numrequests" class="silentclick">
-                  <option value="infinete">Until stopped</option>
-                  <option value="1">1</option>
-                  <option value="100">100</option>
-                  <option value="1000">1000</option>
-                  <option value="10000">10000</option>
-                </select>
-                </label>
+              <td class="wide alignleft">
               </td>
               <td>
-                <label class="container">Aasdaf
-                  <input type="checkbox">
+                <label class="container">Follow
+                  <input type="checkbox" checked>
                   <span class="checkmark"></span>
                 </label>
               </td>
               <td>
-                <label class="container">Asgw sad 
-                  <input type="checkbox">
+                <label class="container">Bully Vars 
+                  <input type="checkbox" checked>
                   <span class="checkmark"></span>
                 </label>
               </td>
@@ -104,7 +95,7 @@
         </fieldset>  
       </div>
       <div class="httpconfig">
-        <fieldset>
+        <fieldset class="fieldset">
           <legend><img src="./images/settings-2.png" alt="" title="" width="14" height="14" border="0"> HTTP Settings</legend>
           <table cellpadding="0" cellspacing="0" class="httpoptions">
             <tr>
@@ -150,12 +141,18 @@
         </fieldset>  
       </div>
       <div class="payloadconfig">
-        <fieldset>
+        <fieldset class="fieldset">
           <legend><img src="./images/settings.png" alt="" title="" width="14" height="14" border="0"> Payload</legend>
           <table>
             <tr>
               <td class="alignleft">
                 <label class="container overrulewidth">Raw
+                <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
+              </td>
+              <td class="alignleft">
+                <label class="container overrulewidth">Query
                 <input type="checkbox" checked>
                 <span class="checkmark"></span>
               </label>
@@ -178,7 +175,7 @@
                   <span class="checkmark"></span>
                 </label>
               </td>
-              <td class="alignleft">
+              <td class="alignleft seperator">
                 &VerticalSeparator;
               </td>
               <td class="alignleft">
@@ -194,10 +191,13 @@
                 </label>
               </td>
               <td class="alignleft">
-                <label class="container overrulewidth">Show output/result
+                <label class="container overrulewidth">Show reply
                   <input type="checkbox">
                   <span class="checkmark"></span>
                 </label>
+              </td>
+              <td class="alignleft seperator">
+                &VerticalSeparator;
               </td>
             </tr>
           </table>
@@ -206,13 +206,50 @@
       </div>
 
       <div class="controls">
-        <button id="start" class="buttons">Begin bullying</button>
-        <button id="stop" class="buttons">Copy to curl</button>
-        <button id="clear" class="buttons">Show log</button>
+        <hr>
+        <button id="start" class="button-84" role="button">Launch<br>URL Bully</button>
+        <hr><hr><hr>
+        <button id="start" class="button-85" role="button">Kill all<br>workers</button>
+        <hr>
+        <button id="start" class="button-85" role="button">Insert<br>raw-payload<br>template</button>
         <hr>
         <div class="workertext">Workers</div>
-        <button id="clear" class="buttonssmall">+</button>
-        <button id="clear" class="buttonssmall">-</button>
+        <button class="button-82-pushable" role="button">
+          <span class="button-82-shadow"></span>
+          <span class="button-82-edge"></span>
+          <span class="button-82-front text">
+            +
+          </span>
+        </button>
+
+        <button class="button-82-pushable" role="button">
+          <span class="button-82-shadow"></span>
+          <span class="button-82-edge"></span>
+          <span class="button-82-front text">
+            -
+          </span>
+        </button>
+        <hr>
+      </div>
+
+      <div class="logwindow">
+        <fieldset class="fieldlog">
+          <legend><img src="./images/log-file.png" alt="" title="" width="14" height="14" border="0"> Log</legend>
+          <textarea id="log" class="log silentclick" name="log" placeholder="" disabled>
+[00-00-0000 00:00:00] (worker-001) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
+[00-00-0000 00:00:00]       (main) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
+[00-00-0000 00:00:00] (worker-003) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
+[00-00-0000 00:00:00] (worker-023) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
+[00-00-0000 00:00:00] (worker-001) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
+[00-00-0000 00:00:00] (worker-006) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
+[00-00-0000 00:00:00] (worker-012) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
+[00-00-0000 00:00:00] (worker-003) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
+[00-00-0000 00:00:00] (worker-004) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
+[00-00-0000 00:00:00] (worker-004) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
+</textarea>
+        </fieldset>  
+      </div>
+
     </main>
 
     <footer>
@@ -222,7 +259,7 @@
         </div>
     </footer>
 
-
+    <script src="./js/jquery-min.js"></script>
     <script src="./js/chart.js"></script>
     <script src="./js/luxon.js"></script>
     <script src="./js/chartjs-adapter-luxon.js"></script>

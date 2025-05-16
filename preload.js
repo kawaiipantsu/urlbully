@@ -1,5 +1,4 @@
-const { contextBridge, ipcRenderer, powerMonitor } = require('electron')
-const electron = require('electron');
+const { electron, contextBridge, ipcRenderer, powerMonitor } = require('electron')
 
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {
@@ -12,9 +11,28 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 })
 
-contextBridge.exposeInMainWorld('usage', {
-  cpu: process.getCPUUsage().percentCPUUsage.toString().slice(0, 5)
-});
+contextBridge.exposeInMainWorld(
+    "api", {
+        invoke: (channel, data) => {
+            let validChannels = ["myfunc"]; // list of ipcMain.handle channels you want access in frontend to
+            if (validChannels.includes(channel)) {
+                // ipcRenderer.invoke accesses ipcMain.handle channels like 'myfunc'
+                // make sure to include this return statement or you won't get your Promise back
+                return ipcRenderer.invoke(channel, data); 
+            }
+        },
+    }
+);
+
+window.addEventListener('contextmenu', (e) => {
+  e.preventDefault()
+  ipcRenderer.send('show-context-menu')
+})
+
+ipcRenderer.on('context-menu-command', (e, command) => {
+  // ...
+})
+
 ipcRenderer.on('cpu', (event, data) => {
   const text = document.getElementById('cpu-graph-bar-text');
   const pct = document.getElementById('cpu-graph-bar-pct');
@@ -27,8 +45,9 @@ ipcRenderer.on('mem-used-pct', (event, data) => {
   text.innerHTML = Math.round(data.toFixed(2))+'%';
   pct.style.width = Math.round(data.toFixed(2))+'%';
 });
+
 ipcRenderer.on('mem', (event, data) => {
-  const test = document.getElementById('test');
-  test.innerHTML = 'Total: ' + data.total_human + ' GB<br>Used: ' + data.used_human + ' GB<br>Free: ' + data.free_human + ' GB<br>Pct Used: ' + data.pctUsed.toFixed(0) + '%<br>Pct Free: ' + data.pctFree.toFixed(0) + '%';
+  //const test = document.getElementById('test');
+  //test.innerHTML = 'Total: ' + data.total_human + ' GB<br>Used: ' + data.used_human + ' GB<br>Free: ' + data.free_human + ' GB<br>Pct Used: ' + data.pctUsed.toFixed(0) + '%<br>Pct Free: ' + data.pctFree.toFixed(0) + '%';
 });
 

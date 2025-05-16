@@ -1,11 +1,121 @@
-const { app, BrowserWindow, nativeImage, Menu} = require('electron')
+const { app, BrowserWindow, nativeImage, Menu, ipcMain, contextBridge} = require('electron')
 const os = require('os')
 const osUtils = require('os-utils')
 const path = require('path')
 
+const isMac = process.platform === 'darwin'
+let mainWindow;
+
+const template = [
+  // { role: 'appMenu' }
+  ...(isMac
+    ? [{
+        label: app.name,
+        submenu: [
+          { role: 'about' },
+          { type: 'separator' },
+          { role: 'services' },
+          { type: 'separator' },
+          { role: 'hide' },
+          { role: 'hideOthers' },
+          { role: 'unhide' },
+          { type: 'separator' },
+          { role: 'quit' }
+        ]
+      }]
+    : []),
+  // { role: 'fileMenu' }
+  {
+    label: 'File',
+    submenu: [
+      isMac ? { role: 'close' } : { role: 'quit' }
+    ]
+  },
+  // { role: 'editMenu' }
+  {
+    label: 'Edit',
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      ...(isMac
+        ? [
+            { role: 'pasteAndMatchStyle' },
+            { role: 'delete' },
+            { role: 'selectAll' },
+            { type: 'separator' },
+            {
+              label: 'Speech',
+              submenu: [
+                { role: 'startSpeaking' },
+                { role: 'stopSpeaking' }
+              ]
+            }
+          ]
+        : [
+            { role: 'delete' },
+            { type: 'separator' },
+            { role: 'selectAll' }
+          ])
+    ]
+  },
+  // { role: 'viewMenu' }
+  {
+    label: 'View',
+    submenu: [
+      { role: 'reload' },
+      { role: 'forceReload' },
+      { role: 'toggleDevTools' },
+      { type: 'separator' },
+      { role: 'resetZoom' },
+      { role: 'zoomIn' },
+      { role: 'zoomOut' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' }
+    ]
+  },
+  // { role: 'windowMenu' }
+  {
+    label: 'Window',
+    submenu: [
+      { role: 'minimize' },
+      { role: 'zoom' },
+      ...(isMac
+        ? [
+            { type: 'separator' },
+            { role: 'front' },
+            { type: 'separator' },
+            { role: 'window' }
+          ]
+        : [
+            { role: 'close' }
+          ])
+    ]
+  },
+  {
+    role: 'help',
+    submenu: [
+      {
+        label: 'THUGSred',
+        click: async () => {
+          const { shell } = require('electron')
+          await shell.openExternal('https://thugs.red')
+        }
+      }
+    ]
+  }
+]
+
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu)
+
+
 // modify your existing createWindow() function
 const createWindow = () => {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     show: false,
     center: true,
     resizable: false,
@@ -14,7 +124,8 @@ const createWindow = () => {
     icon: './static/images/icon_v2.icns',
     width: 930,
     minWidth: 930,
-    minHeight: 700,
+    height: 1000,
+    minHeight: 1000,
     webPreferences: {
         defaultEncoding: 'UTF-8',
         devTools: true,
@@ -66,8 +177,107 @@ const createWindow = () => {
 
 
 
+
+  
+
   mainWindow.loadFile('./static/main.html')
 }
+
+// main
+ipcMain.handle('myfunc', async (event, arg) => {
+  return new Promise(function(resolve, reject) {
+    // do stuff
+    if (true) {
+        resolve("this worked!");
+    } else {
+        reject("this didn't work!");
+    }
+  });  
+});
+
+
+
+ipcMain.on('show-context-menu', (event) => {
+  const template = [
+    {
+      label: 'Select All',
+      role: 'selectall'
+    },
+    { type: 'separator' },
+    {
+      label: 'Copy',
+      role: 'cut',
+    },
+    {
+      label: 'Cut',
+      role: 'cut',
+    },
+    {
+      label: 'Paste',
+      role: 'cut',
+    },
+    { type: 'separator' },
+    {
+        label: 'Encode / Decode',
+        enabled: true,
+        submenu: [
+          {
+            label: 'URL Encode selected',
+            accelerator: 'CmdOrCtrl+Q',
+            click: () => { event.sender.send('context-menu-command', 'urlEncodeSelected') }
+          },
+          {
+            label: 'URL Decode selected',
+            accelerator: 'CmdOrCtrl+E',
+            click: () => { event.sender.send('context-menu-command', 'urlDecodeSelected') }
+          },
+          {
+            label: 'Base64 Encode selected',
+            click: () => { event.sender.send('context-menu-command', 'base64EncodeSelected') }
+          },
+          {
+            label: 'Base64 Decode selected',
+            click: () => { event.sender.send('context-menu-command', 'base64DecodeSelected') }
+          }
+        ]
+    },
+    {
+        label: 'Hashing',
+        enabled: true,
+        submenu: [
+          {
+            label: 'Hash (md5) selected',
+            click: () => { event.sender.send('context-menu-command', 'md5Selected') }
+          },
+          {
+            label: 'Hash (sha256) selected',
+            click: () => { event.sender.send('context-menu-command', 'sha256Selected') }
+          },
+          {
+            label: 'Hash (sha512) selected',
+            click: () => { event.sender.send('context-menu-command', 'sha512Selected') }
+          },
+          {
+            label: 'Hash (crc32) selected',
+            click: () => { event.sender.send('context-menu-command', 'crc32Selected') }
+          }
+        ]
+    },
+    { type: 'separator' },
+    {
+      label: 'Toggle DevTools',
+      accelerator: 'CmdOrCtrl+I',
+      role: 'toggleDevTools'
+    },
+    { type: 'separator' },
+    {
+      label: 'Quit',
+      role: 'quit'
+    }
+  ]
+  const menu = Menu.buildFromTemplate(template)
+  menu.popup({ window: BrowserWindow.fromWebContents(event.sender) })
+})
 
 app.whenReady().then(() => {
   createWindow()
