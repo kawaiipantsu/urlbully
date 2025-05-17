@@ -52,7 +52,7 @@
               <td class="wide alignleft"><label for="felt1">
                 <span class="label">Num requests</span>
                 <select id="numrequests" class="silentclick">
-                  <option value="infinete">Until stopped</option>
+                  <option value="infinete" selected>Until stopped</option>
                   <option value="1">1</option>
                   <option value="100">100</option>
                   <option value="1000">1000</option>
@@ -85,7 +85,7 @@
                 </label>
               </td>
               <td>
-                <label class="container">Bully Vars 
+                <label class="container">Bully Code 
                   <input type="checkbox" checked>
                   <span class="checkmark"></span>
                 </label>
@@ -102,11 +102,14 @@
               <td class="wide alignleft">
                 <label for="method"><div class="label2">Method</div>
                 <select id="method" class="spancustom silentclick">
-                  <option value="get">GET</option>
-                  <option value="post">POST</option>
-                  <option value="put">PUT</option>
-                  <option value="delete">DELETE</option>
-                  <option value="head">HEAD</option>
+                  <option value="GET" selected>GET</option>
+                  <option value="HEAD">HEAD</option>
+                  <option value="POST">POST</option>
+                  <option value="PUT">PUT</option>
+                  <option value="DELETE">DELETE</option>
+                  <option value="CONNECT">CONNECT</option>
+                  <option value="OPTIONS">OPTIONS</option>
+                  <option value="TRACE">TRACE</option>
                 </select>
                 </label>
               </td>
@@ -117,6 +120,12 @@
               <td class="wide alignleft">
                 <label for="useragent"><div class="label2">UA</div>
                 <select id="useragent" class="spancustom silentclick">
+                  <option value="internal" selected>Internal</option>
+
+                  <option value="random10">Random Top10</option>
+                  <option value="random10Desktop">Random Top10 (Desktop)</option>
+                  <option value="random10Mobile">Random Top10 (Mobile)</option>
+                  
                   <option value="chrome">Latest Chrome</option>
                   <option value="firefox">Latest Firefox</option>
                   <option value="safari">Latest Safari</option>
@@ -131,8 +140,6 @@
                   <option value="python">Python</option>
                   <option value="php">PHP</option>
                   <option value="java">Java</option>
-
-                  <option value="random">Random</option>
                 </select>
                 </label>
               </td>
@@ -147,31 +154,31 @@
             <tr>
               <td class="alignleft">
                 <label class="container overrulewidth">Raw
-                <input type="checkbox">
+                <input id="typeRAW" class="typeSelector" type="checkbox">
                 <span class="checkmark"></span>
               </label>
               </td>
               <td class="alignleft">
                 <label class="container overrulewidth">Query
-                <input type="checkbox" checked>
+                <input id="typeQUERY" class="typeSelector" type="checkbox" checked>
                 <span class="checkmark"></span>
               </label>
               </td>
               <td class="alignleft">
                 <label class="container overrulewidth">Body
-                <input type="checkbox">
+                <input id="typeBODY" class="typeSelector" type="checkbox">
                 <span class="checkmark"></span>
               </label>
               </td>
               <td class="alignleft">
                 <label class="container overrulewidth">Json
-                  <input type="checkbox">
+                  <input id="typeJSON" class="typeSelector" type="checkbox">
                   <span class="checkmark"></span>
                 </label>
               </td>
               <td class="alignleft">
                 <label class="container overrulewidth">Fields
-                  <input type="checkbox">
+                  <input id="typeFIELDS" class="typeSelector" type="checkbox">
                   <span class="checkmark"></span>
                 </label>
               </td>
@@ -179,14 +186,8 @@
                 &VerticalSeparator;
               </td>
               <td class="alignleft">
-                <label class="container overrulewidth">Bully Vars
-                  <input type="checkbox" checked>
-                  <span class="checkmark"></span>
-                </label>
-              </td>
-              <td class="alignleft">
-                <label class="container overrulewidth">Javascript
-                  <input type="checkbox">
+                <label class="container overrulewidth">Bully Code
+                  <input id="bullyvars" type="checkbox" checked>
                   <span class="checkmark"></span>
                 </label>
               </td>
@@ -196,9 +197,10 @@
                   <span class="checkmark"></span>
                 </label>
               </td>
-              <td class="alignleft seperator">
-                &VerticalSeparator;
-              </td>
+              <td class="alignleft">
+                <select id="templates" class="templates silentclick" name="templates">
+                  <option value="clear" selected>Import payload template</option>
+                </select>
             </tr>
           </table>
           <textarea id="payload" class="payload silentclick" name="payload" placeholder=""></textarea>
@@ -209,9 +211,9 @@
         <hr>
         <button id="start" class="button-84" role="button">Launch<br>URL Bully</button>
         <hr><hr><hr>
-        <button id="start" class="button-85" role="button">Kill all<br>workers</button>
+        <button id="kill" class="button-85" role="button">Kill all<br>workers</button>
         <hr>
-        <button id="start" class="button-85" role="button">Insert<br>raw-payload<br>template</button>
+        <button id="template" class="button-85" role="button">Insert<br>raw-payload<br>template</button>
         <hr>
         <div class="workertext">Workers</div>
         <button class="button-82-pushable" role="button">
@@ -235,18 +237,8 @@
       <div class="logwindow">
         <fieldset class="fieldlog">
           <legend><img src="./images/log-file.png" alt="" title="" width="14" height="14" border="0"> Log</legend>
-          <textarea id="log" class="log silentclick" name="log" placeholder="" disabled>
-[00-00-0000 00:00:00] (worker-001) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
-[00-00-0000 00:00:00]       (main) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
-[00-00-0000 00:00:00] (worker-003) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
-[00-00-0000 00:00:00] (worker-023) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
-[00-00-0000 00:00:00] (worker-001) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
-[00-00-0000 00:00:00] (worker-006) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
-[00-00-0000 00:00:00] (worker-012) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
-[00-00-0000 00:00:00] (worker-003) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
-[00-00-0000 00:00:00] (worker-004) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
-[00-00-0000 00:00:00] (worker-004) Example log line - lorem ipsum dolor sit amet, consectetur adipiscing...
-</textarea>
+          <div id="log" class="log silentclick">
+          </div>
         </fieldset>  
       </div>
 
@@ -254,8 +246,8 @@
 
     <footer>
       <div class="roundarea">
-        <div class="sendleft">System Idle</div>
-        <div class="sendright">1.0.0 # Node.js <span id="node-version"></span> | Chromium <span id="chrome-version"></span> | Electron <span id="electron-version"></span></div>
+        <div class="sendleft"><span id="status">Fetching system info...</span></div>
+          <div class="sendright">1.0.0 # Node.js <span id="node-version"></span> | Chromium <span id="chrome-version"></span> | Electron <span id="electron-version"></span></div>
         </div>
     </footer>
 

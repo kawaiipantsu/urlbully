@@ -1,0 +1,13 @@
+GET /foo/bar HTTP/1.1
+Host: {{host}}
+User-Agent: {{useragent}}
+Accept: */*
+Accept-Language: da,da-dk;q=0.8,en-us;q=0.5,en;q=0.3
+Accept-Encoding: gzip,deflate
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+Keep-Alive: 115
+Connection: keep-alive
+X-Requested-With: URLBully
+Referer: http://{{host}}/test
+Cookie: foo=bar; lorem=ipsum;
+Authorization: Basic {{base64('username:password')}}

@@ -344,6 +344,7 @@ select {
 }
 
 .overrulewidth {
+    font-size: 0.7em;
     width: inherit;
 }
 
@@ -450,6 +451,11 @@ td {
     resize: none;
     margin-top: 5px;
     padding: 5px;
+    overflow-y: scroll;
+    overflow-x: auto;
+    scrollbar-color: #00000040 #00000020;
+    scrollbar-width: thin;
+    text-wrap: nowrap;
 }
 
 .silentclick:focus {
@@ -791,8 +797,7 @@ hr {
 }
 
 .log {
-    color: rgba(255, 255, 255, 0.403);
-    width: calc(100% - 22px);
+    width: calc(100% - 24px);
     height: calc(100% - 12px);
     border-radius: 2px;
     background-color: #00000015;
@@ -803,8 +808,61 @@ hr {
     resize: none;
     margin-top: 1px;
     margin-left: 10px;
-    overflow-y: scroll;
+    overflow-y: hidden;
     overflow-x: hidden;
     scrollbar-color: #00000040 #00000020;
     scrollbar-width: thin;
+    padding-top: 2px;
+    padding-left: 2px;
+}
+.logline {
+    color: rgba(255, 255, 255, 0.403);
+    font-size: 0.7em;
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre;
+}
+.logline:nth-child(odd) {
+    background-color: #00000009;
+}
+.logline .timestamp {
+    color: #ffffff7e;
+}
+.logline .worker {
+    color: #ffffff29;
+}
+.logline .severity {
+    color: #ffffffc7;
+}
+.logline .message {
+    color: #ffffff54;
+}
+.logline .info {
+    color: #ffffff54;
+}
+.logline .error {
+    color: #ff0000;
+}
+.logline .warn {
+    color: #ffb300;
+}
+.logline .debug {
+    color: #00ff00;
+}
+.logline .trace {
+    color: #00ffff;
+}
+.logline .fatal {
+    color: #ff00ff;
+}
+.logline .success {
+    color: #00ff00;
+}
+.logline .failure {
+    color: #ff0000;
+}
+
+.templates {
+    font-size: 0.7em;
+    padding: 0;
+    margin: 0;
 }
