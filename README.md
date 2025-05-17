@@ -11,6 +11,8 @@
 > It's getting more and more polished!
 > Can't wait to actually begin making some of the engine logic...
 
+URL Bully is a simple tool to bully a webserver on the URL level, it's a UI for when you don't want to script your way out of things! Basically a simple web pen-test tool, inspiration from my needs, curl, Burp Suite. Sometimes the most simple approch can yield victims/targets to deescalate their security or break their application.
+
 # Table of Contents
 
  * [Features](#features)
