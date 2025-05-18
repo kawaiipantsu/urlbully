@@ -79,8 +79,9 @@ main {
     height: 100%;
     box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,1);
 }
+
 legend {
-    font-size: 1.1em;
+    font-size: 1.2em;
     font-weight: bold;
     color: #eeefebe5;
     text-shadow: 2px 2px 6px rgb(0, 0, 0);
@@ -290,13 +291,22 @@ label {
     font-size: 1em;
     font-weight: bold;
     color: rgba(255, 255, 255, 0.634);
-    padding-left: 1px;
-    padding-right: 1px;
 }
 
 .label2 {
     font-size: 1em;
-    width: 60px;
+    width: 70px;
+    float: left;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.634);
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-top: 3px;
+}
+
+.label3 {
+    font-size: 1em;
+    width: 110px;
     float: left;
     font-weight: bold;
     color: rgba(255, 255, 255, 0.634);
@@ -441,7 +451,7 @@ td {
 
 .payload {
     width: calc(100% - 10px);
-    height: calc(100% - 38px);
+    height: calc(100% - 42px);
     border-radius: 10px;
     background-color: #00000015;
     border-top: thin solid #00000020;
@@ -494,19 +504,20 @@ td {
     border-radius: 15px;
     border: 2px solid #00000020;
 }
-hr {
-    border: thin solid #00000020;
-    width: calc(100% - 20px);
+
+.seperator {
+    border: thin solid #00000007;
+    width: 40px;
 }
+
+.largeseperator {
+    border: thin solid #00000020;
+    width: calc( 100% - 50px);
+}
+
 .buttonssmall {
     color: #ffffffd4;
-    background-color: #00000030;
-    font-size: 0.9em;
-    width: 50px;
-    height: 20px;
-    margin-left: 12px;
-    border-radius: 15px;
-    border: thin solid #ffffff20;
+    width: calc(100% - 20px);
 }
 
 .buttons:hover {
@@ -691,9 +702,14 @@ hr {
 }
 
 .button-84 {
+
+    cursor: pointer;
+    font-size: 1em;
+    text-transform:uppercase;
+
     align-items: center;
     background-color: initial;
-    background-image: linear-gradient(hsl(345, 100%, 30%), hsl(345deg 100% 47%));
+    background-image: linear-gradient(hsl(345deg 100% 47%), hsl(345, 100%, 30%));
     border-radius: 8px;
     border-width: 0;
     box-shadow: 0 10px 20px rgba(0, 0, 0, .1),0 3px 6px rgba(0, 0, 0, .05);
@@ -702,8 +718,6 @@ hr {
     cursor: pointer;
     display: inline-flex;
     flex-direction: column;
-    font-family: expo-brand-demi,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-    font-size: 18px;
     height: 52px;
     justify-content: center;
     line-height: 1;
@@ -726,7 +740,7 @@ hr {
 
 .button-84:hover {
   box-shadow: rgba(0, 0, 0, 0.516) 0 4px 6px;
-  background-image: linear-gradient(hsl(345, 74%, 41%), hsl(345deg 100% 47%));
+  background-image: linear-gradient(hsl(345deg 100% 47%), hsl(345, 100%, 20%));
   opacity: .85;
 }
 
@@ -740,9 +754,14 @@ hr {
 
 
 .button-85 {
+
+    cursor: pointer;
+    font-size: 0.7em;
+    text-transform:uppercase;
+
     align-items: center;
     background-color: initial;
-    background-image: linear-gradient(hsla(254, 100%, 50%, 0.099), hsla(0, 0%, 0%, 0.156));
+    background-image: linear-gradient(hsla(0, 0%, 100%, 0.099), hsla(0, 0%, 0%, 0.156));
     border-radius: 8px;
     border-width: 0;
     box-shadow: 0 10px 20px rgba(0, 0, 0, .1),0 3px 6px rgba(0, 0, 0, .05);
@@ -751,8 +770,6 @@ hr {
     cursor: pointer;
     display: inline-flex;
     flex-direction: column;
-    font-family: expo-brand-demi,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-    font-size: 18px;
     height: 52px;
     justify-content: center;
     line-height: 1;
@@ -770,12 +787,12 @@ hr {
     -webkit-user-select: none;
     touch-action: manipulation;
     width: 140px;
-    height: 110px;
+    height: 30px;
 }
 
 .button-85:hover {
-  box-shadow: rgba(0, 0, 0, 0.516) 0 4px 6px;
-  background-image: linear-gradient(hsla(254, 100%, 50%, 0.269), hsla(0, 0%, 0%, 0.156));
+  box-shadow: rgba(0, 0, 0, 0.516) 0 4px 4px;
+  background-image: linear-gradient(hsla(254, 100%, 50%, 0.066), hsla(0, 0%, 0%, 0.156));
   opacity: .85;
 }
 
@@ -798,7 +815,7 @@ hr {
 
 .log {
     width: calc(100% - 24px);
-    height: calc(100% - 12px);
+    height: calc(100% - 10px);
     border-radius: 2px;
     background-color: #00000015;
     border-top: none;
@@ -806,13 +823,13 @@ hr {
     border-left: thin solid #00000040;
     border-right: thin solid #00000040;
     resize: none;
-    margin-top: 1px;
+    margin-top: 0px;
     margin-left: 10px;
     overflow-y: hidden;
     overflow-x: hidden;
     scrollbar-color: #00000040 #00000020;
     scrollbar-width: thin;
-    padding-top: 2px;
+    padding-top: 0px;
     padding-left: 2px;
 }
 .logline {
@@ -865,4 +882,105 @@ hr {
     font-size: 0.7em;
     padding: 0;
     margin: 0;
+}
+
+.menustatus {
+    display: flex;
+    font-size: 0.7em;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border-left: thin solid #00000020;
+    border-right: thin solid #00000020;
+}
+.menubigicon {
+    font-size: 1.7em;
+}
+
+.icon::before {
+    position: absolute;
+    content: "⚫";
+    display: inline-block;
+    margin-left: -115px;
+    color: transparent;
+    text-shadow: 0 0 0 #ffffff33;
+}
+
+.icon:hover::before {
+    color: transparent;
+    text-shadow: 0 0 0 #ffffffd3;
+}
+
+.icon:active:before {
+    color: transparent;
+    text-shadow: 0 0 0 #ff0000ad;
+}
+
+.icon-kill::before {
+    content: "✋";
+    color: transparent;
+    text-shadow: 0 0 0 #ffffff33;
+}
+
+.icon-download::before {
+    content: "🧲";
+    color: transparent;
+    text-shadow: 0 0 0 #ffffff33;
+}
+
+.icon-pubip::before {
+    content: "🖥️";
+    color: transparent;
+    text-shadow: 0 0 0 #ffffff33;
+}
+
+.icon-show::before {
+    content: "💡";
+    color: transparent;
+    text-shadow: 0 0 0 #ffffff33;
+}
+
+.icon-info::before {
+    content: "🔍";
+    color: transparent;
+    text-shadow: 0 0 0 #ffffff33;
+}
+
+.sectionicon {
+    filter: brightness(80%) grayscale(10%);
+    padding-left: 0px;
+    padding-right: 5px;
+}
+
+.specialpad {
+    padding-left: 12px;
+}
+
+#clearlog {
+    cursor: pointer;
+}
+.flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    margin-top: 2px;
+}
+
+.openusertemplates {
+    cursor: pointer;
+    font-size: 0.7em;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+
+}
+
+#openusertemplates {
+    cursor: pointer;
 }

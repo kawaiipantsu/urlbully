@@ -1,6 +1,12 @@
 let userAgent = "Unknown";
 let internalUserAgent = "Unknown";
 
+
+// Bully Code
+let bullyCodeCounters = [];
+let bullyCodeIterators = [];
+// -------------------------------
+
 const userAgents = [
   
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
@@ -182,6 +188,12 @@ $("#urladdress").on('change keyup paste', function() {
 let previousValue = "";
 $("#templates").on('change keyup', function() {
   var templateName = $(this).val();
+
+  // if "---" is selected, do nothing
+  if ( templateName == "---" ) {
+    return;
+  }
+
   var open = $(this).data("isopen");
   previousValue = templateName;
 
@@ -204,7 +216,7 @@ $("#templates").on('change keyup', function() {
       const name = parts[2];
 
       // Remove checkmarks and choose the right one
-      if ( type.toUpperCase() == "RAW" ) {
+      if ( type.toUpperCase() == "RAW" || type.toUpperCase() == "QUERY" || type.toUpperCase() == "FIELDS" || type.toUpperCase() == "BODY" || type.toUpperCase() == "JSON" ) {
         $(".typeSelector").prop("checked", false);
         $("#type"+type.toUpperCase()).prop("checked", true);
       }
@@ -404,8 +416,14 @@ function logMessage( logObj ) {
   const newLine = document.createElement('div');
   newLine.className = 'logline';
   // Get the current timestamp
-  const now = new Date().toISOString();
-  newLine.innerHTML = '<span class="timestamp">['+now+']</span> <span class="worker">('+worker.padStart(10, ' ')+')</span> <span class="severity '+severity.toLowerCase()+'">'+severity.toUpperCase().padStart(6, ' ')+'</span> &VerticalSeparator; <span class="message">'+msg+'</span>';
+  const now = new Date();
+  const optionsTime = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+  const optionsDate = { day: "numeric",month: "long", year: "numeric" };
+  const timeString = now.toLocaleTimeString([], optionsTime);
+  const dateString = now.toLocaleDateString([], optionsDate);
+  const logTimeStamp = dateString + " " + timeString;
+
+  newLine.innerHTML = '<span class="timestamp">['+logTimeStamp+']</span> <span class="worker">('+worker.padStart(10, ' ')+')</span> <span class="severity '+severity.toLowerCase()+'">'+severity.toUpperCase().padStart(6, ' ')+'</span> &VerticalSeparator; <span class="message">'+msg+'</span>';
   log.appendChild(newLine);
 
   const count = document.getElementById("log").children.length;
@@ -429,28 +447,68 @@ function clearLog() {
 $(function() {
   //clearLog(); // This is called in the main process
 
-  $( "#template" ).on( "click", function() {
+  // Update #clock every 1sec
+  setInterval(function() {
+    const now = new Date();
+    const optionsTime = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    const optionsDate = { day: "numeric",month: "long", year: "numeric" };
+    const timeString = now.toLocaleTimeString([], optionsTime);
+    const dateString = now.toLocaleDateString([], optionsDate);
+    const clock = dateString + ", " + timeString;
+    $('#clock').text(clock);
+  }, 1000);
+
+
+  $( "#clearlog" ).on( "click", function() {
     clearLog();
   });
-  $( "#kill" ).on( "click", function() {
-    // Add random log message with random severity and message
-    const workers = ["worker-001", "worker-002", "worker-003", "worker-004", "worker-005", "main", "ui"];
-    const severities = ["info", "warn", "error", "debug", "trace", "fatal"];
-    const messages = [
-      "This is a test message",
-      "This is another test message",
-      "This is a third test message",
-      "This is a fourth test message",
-      "This is a fifth test message",
-    ];
-    const rndSeverity = severities[Math.floor(Math.random() * severities.length)];
-    const rndMessage = messages[Math.floor(Math.random() * messages.length)];
-    const rndWorker = workers[Math.floor(Math.random() * workers.length)];
-    logMessage({
-      worker: rndWorker,
-      severity: rndSeverity,
-      message: rndMessage,
-    });
+
+
+  $( "#logpubip" ).on( "click", function() {
+    window.api.invoke('getPublicIp');
   });
+
+  // Add user templates
+  window.api.invoke('getUserTemplates').then(function(res) {
+    const templates = res;
+    const templateSelector = document.getElementById('templates');
+    const option = document.createElement('option');
+    option.value = '---';
+    option.text = '---';
+    templateSelector.appendChild(option);
+
+    templates.forEach(template => {
+      const option = document.createElement('option');
+      option.value = template.name;
+      option.text = template.name;
+      option.setAttribute('data-template', template.dataEncoded);
+      templateSelector.appendChild(option);
+    });
+  }).catch(function(err) { console.error(err); });
+
+
+  $("#openusertemplates").on( "click", function() {
+    window.api.invoke('openUserTemplates');
+  });
+
+  $("#start").on( "click", function() {
+    console.log("Start button clicked");
+    const workerData = {  config: { 'key1': 'value1' } }
+    window.api.invoke('startWorker', workerData);
+  });
+
+  $("#addWorker").on( "click", function() {
+    const jobData = {  'testMessage': 'This is a test! #from +#' }
+    window.api.invoke('startWorker', jobData);
+  });
+
+  $("#delWorker").on( "click", function() {
+    window.api.invoke('removeWorker');
+  });
+
+  $("#kill").on( "click", function() {
+    window.api.invoke('killAllWorkers');
+  });
+
 });
 

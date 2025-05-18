@@ -1,10 +1,13 @@
-const { app, BrowserWindow, globalShortcut, nativeImage, Menu, ipcMain, contextBridge} = require('electron')
+const { app, BrowserWindow, globalShortcut, nativeImage, Menu, ipcMain, contextBridge, dialog} = require('electron')
 const os = require('os')
 const osUtils = require('os-utils')
 const path = require('node:path')
 const { get } = require('jquery')
 const https = require('https')
 const fs = require('node:fs');
+const Config = require('./storagesettings.js');
+const UserTemplates = require('./storagetemplates.js');
+const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
 
 const appFolder = path.dirname(process.execPath)
 const ourExeName = path.basename(process.execPath)
@@ -20,6 +23,36 @@ const appIcon = nativeImage.createFromPath(path.join(__dirname, 'static/images/i
 
 // Create a url bully user-agent string
 const userAgent = 'URLBully/'+app.getVersion() + ' (THUGSred) ' + ua_version;
+
+let buildBranch = "dev-build "-app.getVersion();
+let workers = [];
+
+const isDev = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'dev';
+if (isDev) {
+  buildBranch = "dev-build "+app.getVersion();
+} else {
+  buildBranch = "prod-build "+app.getVersion();
+}
+
+// Playing around with default config
+// After this you can use set / get methods
+const config = new Config({
+  'filename': 'urlbully-preferences',
+  'content': {
+    'connection': {
+      'timeout': { 
+        'conn': 60,
+        'resolv': 60,
+        'idle': 60
+      }
+    },
+    'http': {
+      'method': 'GET',
+      'useragent': 'Internal',
+      'protocol': 'http / 1.1',
+    },
+  }
+});
 
 let mainWindow;
 
@@ -148,6 +181,7 @@ const createWindow = () => {
         devTools: true,
         webSecurity: true,
         nodeIntegration : true,
+        nodeIntegrationInWorker: true,
         contextIsolation: true,
         preload: path.join(__dirname, 'preload.js')
     }
@@ -159,10 +193,11 @@ const createWindow = () => {
 
   setInterval(() => {
         osUtils.cpuUsage(function (v) {
-
+            const now = new Date().toISOString();
             let tmem = osUtils.totalmem()
             let fmem = osUtils.freemem()
             let sysInfo = {
+                time: now,
                 platform: os.platform(),
                 arch: os.arch(),
                 release: os.release(),
@@ -200,17 +235,209 @@ const createWindow = () => {
         });
   }, 4000);
 
+  setInterval(() => {
+    const now = new Date().toISOString();
+    let workerInfo = {
+        time: now,
+        workers: {
+          count: workers.length
+        }
+    }
+    if ( !mainWindow.isDestroyed() ) mainWindow.webContents.send("workerinfo", workerInfo);
+  }, 1000);
+
   mainWindow.loadFile('./static/main.html')
 }
 
-// main
-ipcMain.handle('myfunc', async (event, arg) => {
+const usertemplates = new UserTemplates();
+
+ipcMain.handle('getUserTemplates', async (event, arg) => {
   return new Promise(function(resolve, reject) {
-    // do stuff
+    const templates = usertemplates.list();
     if (true) {
-        resolve("this worked!");
+        resolve(templates);
     } else {
-        reject("this didn't work!");
+        reject([]);
+    }
+  });  
+});
+
+ipcMain.handle('openUserTemplates', async (event, arg) => {
+  return new Promise(function(resolve, reject) {
+    let path = usertemplates.path;
+    var cmd = '';
+    switch (os.platform().toLowerCase().replace(/[0-9]/g, '').replace('darwin', 'macos')) {
+        case 'win':
+            path = path || '=';
+            cmd = 'explorer';
+            break;
+        case 'linux':
+            path = path || '/';
+            cmd = 'xdg-open';
+            break;
+        case 'macos':
+            path = path || '/';
+            cmd = 'open';
+            break;
+    }
+    let p = require('child_process').spawn(cmd, [path]);
+    p.on('error', (err) => {
+        p.kill();
+        return callback(err);
+    });
+
+    if (true) {
+        resolve();
+    } else {
+        reject();
+    }
+  });  
+});
+
+ipcMain.handle('pingAllWorkers', async (event, arg) => {
+  // Ping all workers
+  if (isMainThread) {
+    for (let i = 0; i < workers.length; i++) {
+      let workerid = workers[i].id;
+      let worker = workers[i].worker;
+      worker.postMessage({ operation: 'internal', worker: workerid, status: 'ping', state: 'ok' });
+    }
+  }
+});
+
+ipcMain.handle('killAllWorkers', async (event, arg) => {
+  // Kill (tell them to exit) all workers
+  if (isMainThread) {
+    for (let i = 0; i < workers.length; i++) {
+      let workerid = workers[i].id;
+      let worker = workers[i].worker;
+      worker.postMessage({ operation: 'internal', worker: workerid, status: 'exit', state: 'ok' });
+    }
+  }
+});
+
+ipcMain.handle('startWorker', async (event, arg) => {
+    // Start a worker
+    if (isMainThread) {
+
+      const currentWorkers = workers.length+1;
+
+      //console.log("Current workers: "+currentWorkers);
+
+      // Main thread: Create a worker thread
+      const worker = new Worker('./worker.js',{ workerData: { id: currentWorkers, args: arg } });
+
+      worker.on('message', (data) => {
+        //console.log(data);
+
+        const operation = data.operation;
+        const message = data.status;
+        const workerid = data.worker;
+        const state = data.state;
+
+        let severity = "INFO";
+        if ( state == "ok" ) { severity = "INFO"; }
+        if ( state == "error" ) { severity = "ERROR"; } 
+
+        if ( operation == "internal" ) {
+          if ( message == "running" ) {
+            // workerid = "worker-id" split and get pid
+            let workerID = workerid.split("-")[1];
+            workers.push({
+              threadId: worker.threadId,
+              id: workerID,
+              worker: worker
+            });
+            //console.log("Workers: "+workers.length);
+          }
+          if ( message == "pong" ) {
+            //console.log(workerid+": Pong!");
+            if ( !mainWindow.isDestroyed() ) mainWindow.webContents.send("logMessage", {
+              worker: workerid,
+              message: "Pong!",
+              severity: "DEBUG"
+            });
+          }
+          if ( message == "exit" ) {
+           let workerID = workerid.split("-")[1];
+            // Remove the worker from the list
+            for (let i = 0; i < workers.length; i++) {
+              if (workers[i].id == workerID) {
+                workers.splice(i, 1);
+                break;
+              }
+            }
+            if ( !mainWindow.isDestroyed() ) mainWindow.webContents.send("logMessage", {
+              worker: "main",
+              message: "Worker finished: "+workerid,
+              severity: "INFO"
+            });
+          }
+          if ( message == "exit-forced" ) {
+           let workerID = workerid.split("-")[1];
+            // Remove the worker from the list
+            for (let i = 0; i < workers.length; i++) {
+              if (workers[i].id == workerID) {
+                workers.splice(i, 1);
+                break;
+              }
+            }
+            if ( !mainWindow.isDestroyed() ) mainWindow.webContents.send("logMessage", {
+              worker: "main",
+              message: "Worker killed: "+workerid,
+              severity: "WARN"
+            });
+          }
+        } else if ( operation == "log" ) {
+          if ( !mainWindow.isDestroyed() ) mainWindow.webContents.send("logMessage", {
+            worker: workerid,
+            message: message,
+            severity: severity
+          });
+        }
+
+      });
+    } 
+});
+
+ipcMain.handle('removeWorker', async (event, arg) => {
+  // Remove a worker
+  // Check we even have a worker
+  if ( workers.length == 0 ) {
+    //console.log("No workers to remove");
+    if ( !mainWindow.isDestroyed() ) mainWindow.webContents.send("logMessage", {
+      worker: "main",
+      message: "No workers to remove",
+      severity: "DEBUG"
+    });
+    return;
+  }
+
+  if (isMainThread) {
+    // Remove latest worker
+    let workerid = workers[workers.length-1].id;
+    let worker = workers[workers.length-1].worker;
+    let threadId = workers[workers.length-1].threadId;
+    //console.log("Removing worker: "+workerid);
+    // Remove the worker from the list
+    for (let i = 0; i < workers.length; i++) {
+      if (workers[i].id == workerid) {
+        workers.splice(i, 1);
+        break;
+      }
+    }
+    // Send exit command to the worker
+    worker.postMessage({ operation: 'internal', worker: workerid, status: 'exit', state: 'ok' });
+  }
+});
+
+ipcMain.handle('getPublicIp', async (event, arg) => {
+  return new Promise(function(resolve, reject) {
+    getPublicIP();
+    if (true) {
+        resolve(true);
+    } else {
+        reject(false);
     }
   });  
 });
@@ -308,7 +535,7 @@ ipcMain.on('show-context-menu', (event) => {
   menu.popup({ window: BrowserWindow.fromWebContents(event.sender) })
 })
 
-function getPublicIP() {
+function getPublicIP(anon=false) {
   // Call https://api.buffer.dk/myip
   // Response JSON like {"ip":"10.10.10.10","dns":"some.hostname.com"}
   var options = {
@@ -333,7 +560,7 @@ function getPublicIP() {
       if (res.statusCode !== 200) {
         //publicIPCallback(false,res.statusCode);
       } else {
-        publicIPCallback(data);
+        publicIPCallback(data,anon);
       }
     });
    });
@@ -377,13 +604,22 @@ function annonymizeIP(ip) {
 }
 
   // Get my public ip and log it
-function publicIPCallback(jsonData) {
+function publicIPCallback(jsonData, anon) {
     var data = JSON.parse(jsonData);
-    if ( !mainWindow.isDestroyed() ) mainWindow.webContents.send("logMessage", {
-      worker: "main",
-      message: "Public IP: "+annonymizeIP(data.ip),
-      severity: "INFO"
-    });
+    if ( !mainWindow.isDestroyed() ) {
+      let hostinfo = "";
+      if ( anon ) {
+        data.ip = annonymizeIP(data.ip);
+      } else {
+        hostinfo = " ("+data.dns+")";
+      }
+
+      mainWindow.webContents.send("logMessage", {
+        worker: "main",
+        message: "Public IP: "+data.ip+hostinfo,
+        severity: "INFO"
+      });
+    }
 }
 
 function readTemplates() {
@@ -443,7 +679,7 @@ app.whenReady().then(() => {
     severity: "INFO"
   });
 
-  getPublicIP();
+  getPublicIP(true);
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()

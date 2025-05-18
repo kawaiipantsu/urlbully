@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "URL Bully is a simple tool to bully a webserver on the URL level, you could call it Denial of Service attack, or bruteforcing strategies. But basically it's just a tool to bully a webserver and irritate the owner. Sometimes the most simple approch can yield victims/targets to deescalate their security or break their application.",
   "main": "app.js",
+  "type": "commonjs",
   "keywords": [
     "url",
     "bully",
@@ -12,7 +13,7 @@
     "bruteforce"
   ],
   "scripts": {
-    "start": "electron-forge start",
+    "start": "NODE_ENV=dev electron-forge start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-forge package",
     "make": "electron-forge make"
@@ -49,6 +50,7 @@
     "jquery": "^3.7.1",
     "os": "^0.1.2",
     "os-utils": "^0.0.14",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "sleep-promise": "^9.1.0"
   }
 }

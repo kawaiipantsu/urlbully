@@ -43,14 +43,14 @@
     <main class="main">
       <div class="urlconfig">
         <fieldset class="fieldset">
-          <legend><img src="./images/worldwide.png" alt="" title="" width="14" height="14" border="0"> Connection Settings</legend>
+          <legend><img src="./images/worldwide.png" class="sectionicon" alt="" title="" width="14" height="14" border="0"> Connection Settings</legend>
             <label for="url">
               <input type="input" id="urladdress" name="url" value="" class="urlinput silentclick" placeholder="example.com / ip" />
             </label>
           <table cellpadding="0" cellspacing="0" class="confoptions">
             <tr>
               <td class="wide alignleft"><label for="felt1">
-                <span class="label">Num requests</span>
+                <span class="label3">Num requests</span>
                 <select id="numrequests" class="silentclick">
                   <option value="infinete" selected>Until stopped</option>
                   <option value="1">1</option>
@@ -76,7 +76,15 @@
           </table>
           <table cellpadding="0" cellspacing="0" class="confoptions">
             <tr>
-              <td class="wide alignleft">
+              <td class="wide alignleft"><label for="felt1">
+                <span class="label3">Backend</span>
+                <select id="backend" class="silentclick">
+                  <option value="web" selected>Node http/https</option>
+                  <option value="socket">Node socket</option>
+                  <option value="curl">Cli curl</option>
+                  <option value="openssl">Cli openssl</option>
+                </select>
+                </label>
               </td>
               <td>
                 <label class="container">Follow
@@ -96,7 +104,7 @@
       </div>
       <div class="httpconfig">
         <fieldset class="fieldset">
-          <legend><img src="./images/settings-2.png" alt="" title="" width="14" height="14" border="0"> HTTP Settings</legend>
+          <legend><img src="./images/settings-2.png" class="sectionicon" alt="" title="" width="14" height="14" border="0"> HTTP Settings</legend>
           <table cellpadding="0" cellspacing="0" class="httpoptions">
             <tr>
               <td class="wide alignleft">
@@ -145,11 +153,44 @@
               </td>
             </tr> 
           </table>
+          <table cellpadding="0" cellspacing="0" class="httpoptions">
+            <tr>
+              <td class="wide alignleft">
+                <label for="method"><div class="label2">Protocol</div>
+                <select id="method" class="spancustom silentclick">
+                  <option value="http_10" >http / 1.0</option>
+                  <option value="http_11" selected>http / 1.1</option>
+                  <option value="http_20">http / 2</option>
+                  <option value="http_3">http / 3</option>
+                </select>
+                </label>
+              </td>
+            </tr> 
+          </table>
+          <table cellpadding="0" cellspacing="0" class="httpoptions">
+            <tr>
+              <td class="wide alignleft">
+                <label for="method"><div class="label2">Timeout</div>
+                <select id="method" class="spancustom silentclick">
+                  <option value="" selected>Until closed</option>
+                  <option value="1s">Force 1sec</option>
+                  <option value="5s">Force 5sec</option>
+                  <option value="10s">Force 10sec</option>
+                  <option value="15s">Force 15sec</option>
+                  <option value="30s">Force 30sec</option>
+                  <option value="60s">Force 60sec</option>
+                  <option value="120s">Force 120sec</option>
+                  <option value="300s">Force 300sec</option>
+                </select>
+                </label>
+              </td>
+            </tr> 
+          </table>
         </fieldset>  
       </div>
       <div class="payloadconfig">
         <fieldset class="fieldset">
-          <legend><img src="./images/settings.png" alt="" title="" width="14" height="14" border="0"> Payload</legend>
+          <legend><img src="./images/settings.png" class="sectionicon" alt="" title="" width="14" height="14" border="0"> Payload</legend>
           <table>
             <tr>
               <td class="alignleft">
@@ -182,18 +223,9 @@
                   <span class="checkmark"></span>
                 </label>
               </td>
-              <td class="alignleft seperator">
-                &VerticalSeparator;
-              </td>
               <td class="alignleft">
-                <label class="container overrulewidth">Bully Code
+                <label class="container overrulewidth">Bully Code interpreter
                   <input id="bullyvars" type="checkbox" checked>
-                  <span class="checkmark"></span>
-                </label>
-              </td>
-              <td class="alignleft">
-                <label class="container overrulewidth">Show reply
-                  <input type="checkbox">
                   <span class="checkmark"></span>
                 </label>
               </td>
@@ -201,6 +233,9 @@
                 <select id="templates" class="templates silentclick" name="templates">
                   <option value="clear" selected>Import payload template</option>
                 </select>
+              </td>
+              <td class="alignleft flex">
+                <img id="openusertemplates" class="sectionicon" src="./images/documentation.png" alt="Open User Templates" title="Open User Templates" width="20" height="20" border="0">
             </tr>
           </table>
           <textarea id="payload" class="payload silentclick" name="payload" placeholder=""></textarea>
@@ -208,15 +243,21 @@
       </div>
 
       <div class="controls">
-        <hr>
-        <button id="start" class="button-84" role="button">Launch<br>URL Bully</button>
-        <hr><hr><hr>
-        <button id="kill" class="button-85" role="button">Kill all<br>workers</button>
-        <hr>
-        <button id="template" class="button-85" role="button">Insert<br>raw-payload<br>template</button>
-        <hr>
+        <hr class="largeseperator">
+        <button id="start" class="button-84" role="button"><span class="menubigicon">🚀</span><br>Launch<br>URL Bully</button>
+        <hr class="largeseperator">
+        <button id="showresponse" class="button-85 icon icon-show" role="button">See response</button>
+        <hr class="seperator">
+        <button id="logpubip" class="button-85 icon icon-pubip" role="button">My public ip</button>
+        <hr class="seperator">
+        <button id="sslinfo" class="button-85 icon icon-info" role="button">SSL/TLS Info</button>
+        <hr class="seperator">
+        <button id="download" class="button-85 icon icon-download" role="button">Download</button>
+        <hr class="seperator">
+        <button id="kill" class="button-85 icon icon-kill" role="button">Kill workers</button>
+        <hr class="largeseperator">
         <div class="workertext">Workers</div>
-        <button class="button-82-pushable" role="button">
+        <button id="addWorker" class="button-82-pushable" role="button">
           <span class="button-82-shadow"></span>
           <span class="button-82-edge"></span>
           <span class="button-82-front text">
@@ -224,30 +265,31 @@
           </span>
         </button>
 
-        <button class="button-82-pushable" role="button">
+        <button id="delWorker" class="button-82-pushable" role="button">
           <span class="button-82-shadow"></span>
           <span class="button-82-edge"></span>
           <span class="button-82-front text">
             -
           </span>
         </button>
-        <hr>
+        
+        <hr class="largeseperator">
+        <span id="menustatus" class="menustatus"></span>
       </div>
 
       <div class="logwindow">
         <fieldset class="fieldlog">
-          <legend><img src="./images/log-file.png" alt="" title="" width="14" height="14" border="0"> Log</legend>
+          <legend class="specialpad"><img id="clearlog" class="sectionicon" src="./images/log-file.png" alt="Clear log" title="Clear log" width="14" height="14" border="0"> Log</legend>
           <div id="log" class="log silentclick">
           </div>
         </fieldset>  
       </div>
-
     </main>
 
     <footer>
       <div class="roundarea">
-        <div class="sendleft"><span id="status">Fetching system info...</span></div>
-          <div class="sendright">1.0.0 # Node.js <span id="node-version"></span> | Chromium <span id="chrome-version"></span> | Electron <span id="electron-version"></span></div>
+        <div class="sendleft"><span id="clock">Jan 00 0000, 00:00:00</span></div>
+          <div class="sendright"><span id="status">Fetching system info...</span></div>
         </div>
     </footer>
 
